@@ -20,24 +20,33 @@ class CreateUserProfile:
             print(f"The username '{self._username}' already exists, try logging in or using a different username.")
             return False
 
-    def display_profile(self):
-        print("User Profile:")
-        print("Email:", self._email)
-        print("Username:", self._username)
-        print("Date of Birth:", self._date_of_birth)
 
-def user_login():
+def sign_up():
+    print('Signing up')
+    create_profile = CreateUserProfile()
+    succes = create_profile.creating_user()
+    return succes
+
+
+def log_in():
+    print('Logging in')
     username = input('Input your username: ')
     if not os.path.exists(f'X:/Python/kursinis/try/userProfiles/{username}'):
-        print(f"Username {username} doesn't exist, try signing up")
+        print(f"Username '{username}' doesn't exist, try signing up")
+        return False
     else:
-        password = getpass.getpass('Input your password: ')
-        with open(f'X:/Python/kursinis/try/userProfiles/{username}/{username}.txt', 'r') as f:
-            file = f.readlines()
-            while password != file[1]:
-                print('Incorrect password! Try again')
-                continue
-            print(f'Succsesfully logged in, welcome back, {username}!')
+        while True:
+            password = input('Input your password: ')
+            with open(f'X:/Python/kursinis/try/userProfiles/{username}/{username}.txt', 'r') as f:
+                file = f.readlines()
+                if password == file[1].strip():
+                    print(f'Succsesfully logged in, welcome back, {username}!')
+                    break
+                else:
+                    print('Incorrect password! Try again')
+                    continue
+        return True
+
 
 def delete_profile(username):
     os.remove(f'X:/Python/kursinis/try/userProfiles/{username}.txt')
