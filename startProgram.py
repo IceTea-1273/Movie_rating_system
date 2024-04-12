@@ -9,7 +9,7 @@ def sign_up():
 
 def log_in():
     print('Logging in')
-    
+    profileManaging.user_login()
 
 
 def start():
@@ -28,7 +28,7 @@ def start():
             
         elif choice == "2":
             log_in()
-            continue
+            break
         
         elif choice == "3":
             print("Exiting program.")
