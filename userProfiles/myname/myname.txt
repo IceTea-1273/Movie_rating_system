@@ -1,4 +1,0 @@
-email
-password
-myname
-12 12 12
