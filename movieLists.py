@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import movieChoosing
 
 # Strategy interface
 class ListStrategy(ABC):
@@ -27,37 +28,71 @@ class ListStrategy(ABC):
 class ToWatchList(ListStrategy):
 
     def add_to_list(self, username):
-        title = input("What movie would you like to add? ")
+        title = movieChoosing.movie_searcher()
         file_path = self._get_file_path(username, 'TOWATCH')
-        with open(file_path, 'a') as f:
-                f.write(f"{title}\n")
-        print(f"Added '{title}' to To-Watch List")
+        with open(file_path, 'r') as f:
+            existing_movies = [line.strip() for line in f]
+        if title in existing_movies:
+            print(f"'{title}' is already in the To-Watch List.")
+        else:
+            with open(file_path, 'a') as f:
+                    f.write(f"{title}\n")
+            print(f"Added '{title}' to To-Watch List")
 
     def remove_from_list(self, username):
-        title = int(input("Which movie would you like to remove? (nr)"))
         file_path = self._get_file_path(username, 'TOWATCH')
+        print("To-Watch List:")
         with open(file_path, 'r') as f:
             lines = f.readlines()
-            removed = lines.pop(title-1)
+            for idx, line in enumerate(lines, start=1):
+                print(f"{idx}. {line.strip()}")
+
+        while True:
+            title = input("Which movie would you like to remove? (nr)")
+            if not title.isdigit():
+                print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
+                continue
+            title = int(title)
+            if not (1 <= title <= len(lines)):
+                print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
+                continue
+            break
+
+        removed = lines.pop(title-1)
         with open(file_path, 'w') as f: 
             for line in lines:
-                f.write(str(line))   
-        print(f"Removed '{title}' from To-Watch List")
+                f.write(line) 
+                f.write('\n')
+        print(f"Removed '{removed}' from To-Watch List")
 
     def move_to_watched(self, username):
-        self.display_list(username)
         file_path = self._get_file_path(username, 'TOWATCH')
-        title = int(input("Which movie did you watch from your To-Watch list? (nr)"))
-        with open(f'X:/Python/kursinis/try/userProfiles/{username}/TOWATCH.txt', 'r') as f:
-            lines = f.readlines()
-            removed = lines.pop(title-1)
-        file_path = self._get_file_path(username, 'WATCHED')
         with open(file_path, 'r') as f:
+            lines = f.readlines()
+        for idx, line in enumerate(lines, start=1):
+            print(f"{idx}. {line.strip()}")
+        while True:
+            title = input("Which movie did you watch from your To-Watch list? (nr)")
+            if not title.isdigit():
+                print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
+                continue
+            title = int(title)
+            if not (1 <= title <= len(lines)):
+                print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
+                continue
+            break
+        removed = lines.pop(title-1)
+        with open(file_path, 'w') as f:
+            for line in lines:
+                f.write(line)
+        file_path = self._get_file_path(username, 'WATCHED')
+        with open(file_path, 'a') as f:
             f.write(f"{removed}\n")
+        print(f"Moved {removed} to Watched list")
 
 
     def display_list(self, username):
-        print('To watch list: ')
+        print("To watch list: ")
         file_path = self._get_file_path(username, 'TOWATCH')
         with open(file_path, 'r') as f: 
             count = 1
@@ -68,31 +103,48 @@ class ToWatchList(ListStrategy):
 
 class WatchedList(ListStrategy):
     def add_to_list(self, username):
-        title = input("What movie would you like to add? ")
-        rating = input("What do you rate this movie 1-10? ")
+        title = movieChoosing.movie_searcher()
         file_path = self._get_file_path(username, 'WATCHED')
-        with open(file_path, 'a') as f:
+        with open(file_path, 'r') as f:
+            existing_movies = [line.strip().split(" ")[1] for line in f]
+        if title in existing_movies:
+            print(f"'{title}' is already in the Watched List.")
+        else:
+            rating = input("What do you rate this movie 1-10? ")
+            with open(file_path, 'a') as f:
                 f.write(f"'{title}\n' Rating: {rating}")
         print(f"Added '{title}' to Watched List")
 
     def remove_from_list(self, username):
-        title = int(input("Which movie would you like to remove? (nr)"))
         file_path = self._get_file_path(username, 'WATCHED')
+        print("Watched List:")
         with open(file_path, 'r') as f:
             lines = f.readlines()
-            removed = lines.pop(title-1)
+            for idx, line in enumerate(lines, start=1):
+                print(f"{idx}. {line.strip()}")
+        while True:
+            title = input("Which movie would you like to remove? (nr)")
+            if not title.isdigit():
+                print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
+                continue
+            title = int(title)
+            if not (1 <= title <= len(lines)):
+                print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
+                continue
+            break
+        removed = lines.pop(title-1)
         with open(file_path, 'w') as f: 
             for line in lines:
-                f.write(str(line))   
-        print(f"Removed '{title}' from Watched List")
+                f.write(line) 
+                f.write('\n')
+        print(f"Removed '{removed}' from Watched List")
 
     def display_list(self, username):
-        print('Watched list: ')
+        print("Watched list: ")
         file_path = self._get_file_path(username, 'WATCHED')
         with open(file_path, 'r') as f: 
-            lines = f.readlines()
             count = 1
-            for line in lines:
+            for line in f:
                 print(f'{count}. {line}')
                 count += 1
 
