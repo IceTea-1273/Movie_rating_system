@@ -1,5 +1,5 @@
 import profileManaging
-import movieLists
+import movieLists as m
 
 
 def start():
@@ -14,7 +14,6 @@ def start():
         if choice == "1":
             success, username = profileManaging.sign_up()
             if success:
-                print(f"Welcome, {username}!")
                 break
             else:
                 continue
@@ -32,9 +31,11 @@ def start():
             break
         else:
             print("Invalid choice. Please try again.")
+    return username
 
 def functions():
     running = True
+    manager = m.ListManager(m.ToWatchList())
     while running:
         print("\nWhat would you like to do? ")
         print("1. Display to-watch list")
@@ -46,32 +47,41 @@ def functions():
         choice = input("Choose an option: ")
 
         if choice == '1':
-            print('To-watch list: ')
+            manager.set_strategy(m.ToWatchList())
+            manager.display_list(username)
         elif choice == '2':
             managing = True
             while managing:
-                print("\nAdd/remove from list, back.")
+                print("\nAdd/remove, move to 'Watched', back.")
                 manage = input().lower()
                 if manage == 'add':
-                    print('adding')
+                    manager.set_strategy(m.ToWatchList())
+                    manager.add_to_list(username)
                 elif manage == 'remove':
-                    print('removing')
+                    manager.set_strategy(m.ToWatchList())
+                    manager.remove_from_list(username)
+                elif manage == 'move':
+                    manager.set_strategy(m.ToWatchList())
+                    manager.move_to_watched(username)
                 elif manage =='back':
                     break 
                 else:
                     print("Such a function doesn't exist")
                     continue
         elif choice == '3':
-            print("Watched list: ")
+            manager.set_strategy(m.WatchedList())
+            manager.display_list(username)
         elif choice == '4':
             managing = True
             while managing:
                 print("\nAdd/remove from list, back.")
                 manage = input().lower()
                 if manage == 'add':
-                    print('adding')
+                    manager.set_strategy(m.WatchedList())
+                    manager.add_to_list(username)
                 elif manage == 'remove':
-                    print('removing')
+                    manager.set_strategy(m.WatchedList())
+                    manager.remove_from_list(username)
                 elif manage =='back':
                     break 
                 else:
@@ -90,4 +100,4 @@ def functions():
 if __name__ == "__main__":
     start()
     print(f'Using program as {username}')
-    #functions()
+    functions()

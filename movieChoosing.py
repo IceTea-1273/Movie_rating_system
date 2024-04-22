@@ -11,7 +11,8 @@ class MovieSearch():
         if self.movies is None:  
             print("No movies found.")
             return False
-        print(f'Searching for "{self.movie_title}"...')
+        if len(self.movies) == 0:
+            return False
         print("Search Results:")
         for idx, movie in enumerate(self.movies, start=1):
             title = movie.get('title', 'Unknown Title')
@@ -23,7 +24,9 @@ class MovieSearch():
         if self.search_movie():
             while True:
                 if self.movies is None:
-                    return None
+                    return False
+                if len(self.movies) == 0:
+                    return False
                 movie_id = input("Which movie from the list would you like to add? (nr) ")
                 if not movie_id.isdigit():
                     print("Invalid choice. Please enter a valid number.")
@@ -45,6 +48,11 @@ def movie_searcher():
             continue
         searcher = MovieSearch(movie_title)
         selected_movie = searcher.choose_movie()
-        return selected_movie
+        if selected_movie == False:
+            print("No movies found.")
+            return False
+        else:
+            return selected_movie
+    
 
     

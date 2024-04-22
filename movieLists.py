@@ -29,6 +29,9 @@ class ToWatchList(ListStrategy):
 
     def add_to_list(self, username):
         title = movieChoosing.movie_searcher()
+        if title is None:
+            print("No movies found")
+            return
         file_path = self._get_file_path(username, 'TOWATCH')
         with open(file_path, 'r') as f:
             existing_movies = [line.strip() for line in f]
@@ -41,38 +44,32 @@ class ToWatchList(ListStrategy):
 
     def remove_from_list(self, username):
         file_path = self._get_file_path(username, 'TOWATCH')
-        print("To-Watch List:")
-        with open(file_path, 'r') as f:
+        with open(file_path, 'r') as f: 
             lines = f.readlines()
-            for idx, line in enumerate(lines, start=1):
-                print(f"{idx}. {line.strip()}")
-
+        self.display_list(username)
         while True:
-            title = input("Which movie would you like to remove? (nr)")
+            title = input("Which movie would you like to remove? (nr) ")
             if not title.isdigit():
                 print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
                 continue
-            title = int(title)
-            if not (1 <= title <= len(lines)):
+            title = int(title) - 1
+            if not (0 <= title <= len(lines)):
                 print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
                 continue
             break
-
-        removed = lines.pop(title-1)
+        removed = lines.pop(title)
         with open(file_path, 'w') as f: 
             for line in lines:
                 f.write(line) 
-                f.write('\n')
-        print(f"Removed '{removed}' from To-Watch List")
+        print(f"Removed '{removed.strip()}' from To-Watch List")
 
     def move_to_watched(self, username):
         file_path = self._get_file_path(username, 'TOWATCH')
-        with open(file_path, 'r') as f:
+        with open(file_path, 'r') as f: 
             lines = f.readlines()
-        for idx, line in enumerate(lines, start=1):
-            print(f"{idx}. {line.strip()}")
+        self.display_list(username)
         while True:
-            title = input("Which movie did you watch from your To-Watch list? (nr)")
+            title = input("Which movie did you watch from your To-Watch list? (nr) ")
             if not title.isdigit():
                 print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
                 continue
@@ -80,15 +77,26 @@ class ToWatchList(ListStrategy):
             if not (1 <= title <= len(lines)):
                 print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
                 continue
+            while True:
+                rating = input("What do you rate this movie 1-10? ")
+                if not rating.isdigit():
+                    print("Invalid choice. Please enter a number between 1 and 10.")
+                    continue
+                rating = int(rating)
+                if not (1 <= rating <= 10):
+                    print("Invalid choice. Please enter a number between 1 and 10.")
+                    continue
+                break
             break
         removed = lines.pop(title-1)
         with open(file_path, 'w') as f:
             for line in lines:
                 f.write(line)
         file_path = self._get_file_path(username, 'WATCHED')
+
         with open(file_path, 'a') as f:
-            f.write(f"{removed}\n")
-        print(f"Moved {removed} to Watched list")
+            f.write(f"'{removed.strip()}' Rating: {rating}\n")
+        print(f"Moved {removed.strip()} to Watched list")
 
 
     def display_list(self, username):
@@ -97,47 +105,56 @@ class ToWatchList(ListStrategy):
         with open(file_path, 'r') as f: 
             count = 1
             for line in f:
-                print(f'{count}. {line}')
+                print(f'{count}. {line.strip()}')
                 count += 1   
 
 
 class WatchedList(ListStrategy):
     def add_to_list(self, username):
         title = movieChoosing.movie_searcher()
+        if title is None:
+            print("No movies found")
+            return
         file_path = self._get_file_path(username, 'WATCHED')
         with open(file_path, 'r') as f:
-            existing_movies = [line.strip().split(" ")[1] for line in f]
+            existing_movies = [line.strip().split(" ")[0] for line in f]
         if title in existing_movies:
             print(f"'{title}' is already in the Watched List.")
         else:
-            rating = input("What do you rate this movie 1-10? ")
+            while True:
+                rating = input("What do you rate this movie 1-10? ")
+                if not rating.isdigit():
+                    print("Invalid choice. Please enter a number between 1 and 10.")
+                    continue
+                rating = int(rating)
+                if not (1 <= rating <= 10):
+                    print("Invalid choice. Please enter a number between 1 and 10.")
+                    continue
+                break
             with open(file_path, 'a') as f:
-                f.write(f"'{title}\n' Rating: {rating}")
+                f.write(f"'{title}' Rating: {rating}\n")
         print(f"Added '{title}' to Watched List")
 
     def remove_from_list(self, username):
         file_path = self._get_file_path(username, 'WATCHED')
-        print("Watched List:")
         with open(file_path, 'r') as f:
             lines = f.readlines()
-            for idx, line in enumerate(lines, start=1):
-                print(f"{idx}. {line.strip()}")
+        self.display_list(username)
         while True:
-            title = input("Which movie would you like to remove? (nr)")
+            title = input("Which movie would you like to remove? (nr) ")
             if not title.isdigit():
                 print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
                 continue
-            title = int(title)
-            if not (1 <= title <= len(lines)):
+            title = int(title) -1
+            if not (0 <= title <= len(lines)):
                 print(f"Invalid choice. Please enter a number between 1 and {len(lines)}.")
                 continue
             break
-        removed = lines.pop(title-1)
+        removed = lines.pop(title)
         with open(file_path, 'w') as f: 
             for line in lines:
                 f.write(line) 
-                f.write('\n')
-        print(f"Removed '{removed}' from Watched List")
+        print(f"Removed '{removed.strip()}' from Watched List")
 
     def display_list(self, username):
         print("Watched list: ")
@@ -145,9 +162,11 @@ class WatchedList(ListStrategy):
         with open(file_path, 'r') as f: 
             count = 1
             for line in f:
-                print(f'{count}. {line}')
+                print(f'{count}. {line.strip()}')
                 count += 1
-
+    
+    def move_to_watched(self, username):
+        pass
 
 
 # Context
@@ -168,27 +187,8 @@ class ListManager:
         self._strategy.display_list(username)
 
     def move_to_watched(self, username):
-        if isinstance(self._strategy, WatchedList):
+        if isinstance(self._strategy, ToWatchList):
             self._strategy.move_to_watched(username)
         else:
             print("Error: This method is not supported by the current strategy.")
 
-# Client code
-def main():
-    # Initialize with To-Watch List strategy
-    manager = ListManager(ToWatchList())
-    manager.add_to_list('iceTea')
-    manager.display_list('iceTea')
-    manager.remove_from_list('iceTea')
-    manager.display_list('iceTea')
-    manager.add_to_list('iceTea')
-    manager.display_list('iceTea')
-
-
- #   # Switch to Watched List strategy
-  #  manager.set_strategy(WatchedList())
-  #  manager.add_to_list("Movie X")
-  #  manager.display_list()
-
-if __name__ == "__main__":
-    main()
