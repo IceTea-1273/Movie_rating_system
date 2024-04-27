@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import re
 import movieChoosing
 
 # Strategy interface
@@ -116,8 +117,12 @@ class WatchedList(ListStrategy):
             print("No movies found")
             return
         file_path = self._get_file_path(username, 'WATCHED')
+        existing_movies = []
         with open(file_path, 'r') as f:
-            existing_movies = [line.strip().split(" ")[0] for line in f]
+            for line in f:
+                match = re.search(r"'(.*?)'", line)
+                if match:
+                    existing_movies.append(match.group(1))
         if title in existing_movies:
             print(f"'{title}' is already in the Watched List.")
         else:
@@ -133,7 +138,7 @@ class WatchedList(ListStrategy):
                 break
             with open(file_path, 'a') as f:
                 f.write(f"'{title}' Rating: {rating}\n")
-        print(f"Added '{title}' to Watched List")
+            print(f"Added '{title}' to Watched List")
 
     def remove_from_list(self, username):
         file_path = self._get_file_path(username, 'WATCHED')

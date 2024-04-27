@@ -3,11 +3,11 @@ from imdbDatabase import IMDbWrapper
 class MovieSearch():
 
     def __init__(self, movie_title):
-        self.movie_title = movie_title
-        self.imdb_wrapper = IMDbWrapper()
+        self.__movie_title = movie_title
+        self.__imdb_wrapper = IMDbWrapper()
 
     def search_movie(self):
-        self.movies = self.imdb_wrapper.search_results(self.movie_title)
+        self.movies = self.__imdb_wrapper.search_results(self.__movie_title)
         if self.movies is None:  
             print("No movies found.")
             return False
@@ -35,7 +35,7 @@ class MovieSearch():
                 if not (1 <= movie_id <= len(self.movies)):
                     print("Invalid choice. Please enter a valid number.")
                     continue
-                selected_movie= self.imdb_wrapper.get_movie_details(movie_id)
+                selected_movie= self.__imdb_wrapper.get_movie_details(movie_id)
                 break
             return selected_movie
 
