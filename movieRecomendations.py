@@ -32,5 +32,3 @@ class RecomendMovies:
         print("\nRecomended movies, based on your watched list" )
         response = ai.chat_with_gpt(movie_input)
         print(response)    
-        
-

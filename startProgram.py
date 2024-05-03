@@ -119,5 +119,4 @@ def functions():
 
 if __name__ == "__main__":
     start()
-    print(f'Using program as {username}')
     functions()

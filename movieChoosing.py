@@ -1,19 +1,22 @@
 from imdbDatabase import IMDbWrapper
 
-class MovieSearch():
+class MovieSearch:
 
     def __init__(self, movie_title):
         self.__movie_title = movie_title
         self.__imdb_wrapper = IMDbWrapper()
+        self.movies = []
 
     def search_movie(self):
         self.movies = self.__imdb_wrapper.search_results(self.__movie_title)
+        print("DEBUG - Movies:", self.movies)  # Add this line for debugging
         if self.movies is None:  
             print("No movies found.")
             return False
         if len(self.movies) == 0:
+            print("No movies found...")
             return False
-        print("Search Results:")
+        print("Search Results: ")
         for idx, movie in enumerate(self.movies, start=1):
             title = movie.get('title', 'Unknown Title')
             year = movie.get('year', 'Unknown Year')
@@ -22,11 +25,11 @@ class MovieSearch():
 
     def choose_movie(self):
         if self.search_movie():
+            if not self.movies:
+                print("No movies found:( )")
+                return None
+            print("DEBUGing -Movies:", self.movies)
             while True:
-                if self.movies is None:
-                    return False
-                if len(self.movies) == 0:
-                    return False
                 movie_id = input("Which movie from the list would you like to add? (nr) ")
                 if not movie_id.isdigit():
                     print("Invalid choice. Please enter a valid number.")
@@ -36,8 +39,11 @@ class MovieSearch():
                     print("Invalid choice. Please enter a valid number.")
                     continue
                 selected_movie= self.__imdb_wrapper.get_movie_details(movie_id)
-                break
-            return selected_movie
+                return selected_movie
+        else:
+            print("No movies founddddd")
+            return None
+            
 
 
 def movie_searcher():
@@ -53,6 +59,3 @@ def movie_searcher():
             return False
         else:
             return selected_movie
-    
-
-    
