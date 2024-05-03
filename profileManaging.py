@@ -64,20 +64,19 @@ class CreateUserProfile(Validation):
         self.__date_of_birth = self._get_valid_date_of_birth()    
         
     def creating_user(self):
-        if not os.path.exists(f'X:/Python/kursinis/try/userProfiles/{self.__username}'):
-            os.makedirs(f'X:/Python/kursinis/try/userProfiles/{self.__username}')
-            print(f"Welcome, {self.__username}. Account created successfully.")
-            with open(f'X:/Python/kursinis/try/userProfiles/{self.__username}/{self.__username}.txt', 'w') as f:
-                f.write(f'{self.__email}\n{self.__password}\n{self.__username}\n{self.__date_of_birth}\n')
-            with open(f'X:/Python/kursinis/try/userProfiles/{self.__username}/TOWATCH.txt', 'w'):
-                pass
-            with open(f'X:/Python/kursinis/try/userProfiles/{self.__username}/WATCHED.txt', 'w'):
-                pass
-            return True
-        else:
-            print(f"The username '{self.__username}' already exists, try logging in or using a different username.")
+        user_dir = os.path.join(os.curdir, "userProfiles", self.__username)
+        if os.path.exists(user_dir):
+            print(f"The username '{self.__username}' already exists. Please choose a different username or try logging in.")
             return False
-        
+        os.makedirs(user_dir)
+        print(f"Welcome, {self.__username}! Account created successfully.")
+        profile_file_path = os.path.join(user_dir, f"{self.__username}.txt")
+        with open(profile_file_path, 'w') as f:
+            f.write(f'{self.__email}\n{self.__password}\n{self.__username}\n{self.__date_of_birth}\n')
+        open(os.path.join(user_dir, "TOWATCH.txt"), 'w').close()
+        open(os.path.join(user_dir, "WATCHED.txt"), 'w').close()
+        return True
+
     def get_username(self):
         return self.__username
 
@@ -93,13 +92,15 @@ def sign_up():
 def log_in():
     print('Logging in')
     username = input('Input your username: ')
-    if not os.path.exists(f'X:/Python/kursinis/try/userProfiles/{username}'):
+    user_dir = os.path.join(os.curdir, "userProfiles", username)
+    if not os.path.exists(user_dir):
         print(f"Username '{username}' doesn't exist, try signing up")
         return False, username
     else:
         while True:
             password = pwinput.pwinput('Input your password: ')
-            with open(f'X:/Python/kursinis/try/userProfiles/{username}/{username}.txt', 'r') as f:
+            user_file_path = os.path.join(user_dir, f"{username}.txt")
+            with open(user_file_path, 'r') as f:
                 file = f.readlines()
                 if password == file[1].strip():
                     print(f'Succsesfully logged in')

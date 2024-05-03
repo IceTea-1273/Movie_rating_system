@@ -1,9 +1,15 @@
 import profileManaging
 import movieLists as m
 import movieRecomendations as r
+import os
 
 def start():
     global username
+    user_profiles_dir = os.path.join(os.curdir, "userProfiles")
+    if not os.path.exists(user_profiles_dir):
+        os.makedirs(user_profiles_dir)
+        print("User profiles directory created.")
+        
     running = True
     while running:
         print("\n1. Sign up")
@@ -14,7 +20,7 @@ def start():
         if choice == "1":
             success, username = profileManaging.sign_up()
             if success:
-                break
+                return True
             else:
                 continue
             
@@ -22,13 +28,13 @@ def start():
             success, username = profileManaging.log_in()
             if success:
                 print(f"Welcome back, {username}!")
-                break
+                return True
             else:
                 continue
                
         elif choice == "3":
             print("Exiting program.")
-            break
+            return False
         else:
             print("Invalid choice. Please try again.")
     return username
@@ -110,7 +116,7 @@ def functions():
                     continue                    
 
         elif choice == '6':
-            print("exiting program")
+            print("Exiting program")
             break
         else:
             print("Such a function doesn't exist.")
@@ -118,5 +124,8 @@ def functions():
 
 
 if __name__ == "__main__":
-    start()
-    functions()
+
+    if start():
+        functions()
+    else:
+        exit()

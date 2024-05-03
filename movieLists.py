@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import re
+import os
 import movieChoosing
 
 # Strategy interface
@@ -21,7 +22,8 @@ class ListStrategy(ABC):
         pass
 
     def _get_file_path(self, username, list_type):
-        return f'X:/Python/kursinis/try/userProfiles/{username}/{list_type}.txt'
+        user_dir = os.path.join(os.curdir, "userProfiles", username, f"{list_type}.txt")
+        return user_dir
 
 
 

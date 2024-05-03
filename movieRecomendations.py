@@ -1,5 +1,6 @@
 import openaiAPI as ai
 import re
+import os
 
 class RecomendMovies:
 
@@ -21,7 +22,8 @@ class RecomendMovies:
         print("\n", response)
 
     def from_watched(self, username):
-        with open(f'X:/Python/kursinis/try/userProfiles/{username}/WATCHED.txt', 'r') as f:
+        user_dir = os.path.join(os.curdir, "userProfiles", username, "WATCHED.txt")
+        with open(user_dir, 'r') as f:
             existing_movies = []
             for line in f:
                 match = re.search(r"'(.*?)'", line)
