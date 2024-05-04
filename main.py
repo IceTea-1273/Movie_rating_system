@@ -121,8 +121,6 @@ def functions():
         else:
             print("Such a function doesn't exist.")
 
-
-
 if __name__ == "__main__":
 
     if start():
