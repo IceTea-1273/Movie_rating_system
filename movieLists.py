@@ -49,6 +49,9 @@ class ToWatchList(ListStrategy):
         file_path = self._get_file_path(username, 'TOWATCH')
         with open(file_path, 'r') as f: 
             lines = f.readlines()
+        if lines == []:
+            print("To-watch list is empty.")
+            return None
         self.display_list(username)
         while True:
             title = input("Which movie would you like to remove? (nr) ")
@@ -70,6 +73,9 @@ class ToWatchList(ListStrategy):
         file_path = self._get_file_path(username, 'TOWATCH')
         with open(file_path, 'r') as f: 
             lines = f.readlines()
+        if lines == []:
+            print("To-watch list is empty.")
+            return None
         self.display_list(username)
         while True:
             title = input("Which movie did you watch from your To-Watch list? (nr) ")
@@ -146,6 +152,9 @@ class WatchedList(ListStrategy):
         file_path = self._get_file_path(username, 'WATCHED')
         with open(file_path, 'r') as f:
             lines = f.readlines()
+        if lines == []:
+            print("Watched list is empty.")
+            return None
         self.display_list(username)
         while True:
             title = input("Which movie would you like to remove? (nr) ")
