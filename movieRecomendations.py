@@ -22,13 +22,16 @@ class RecomendMovies:
         print("\n", response)
 
     def from_watched(self, username):
-        user_dir = os.path.join(os.curdir, "userProfiles", username, "WATCHED.txt")
-        with open(user_dir, 'r') as f:
+        file_path = os.path.join(os.curdir, "userProfiles", username, "WATCHED.txt")
+        with open(file_path, 'r') as f:
             existing_movies = []
             for line in f:
                 match = re.search(r"'(.*?)'", line)
                 if match:
                     existing_movies.append(match.group(1))
+        if existing_movies == []:
+            print("Watched list is empty.")
+            return None
         user_input = " ".join(existing_movies)
         movie_input = (f"Give me 3 movie recomendations based on these movies: {user_input}\n")
         print("\nRecomended movies, based on your watched list" )

@@ -1,4 +1,0 @@
-email
-pass
-iceTea
-1234

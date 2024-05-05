@@ -51,27 +51,32 @@ def functions():
         print("4. Manage watched list")
         print("5. Get a recomendation")
         print("6. Exit program")
-        choice = input("Choose an option: ")
+        choice = input("Choose an option: \n")
 
         if choice == '1':
             manager.set_strategy(m.ToWatchList())
             manager.display_list(username)
         elif choice == '2':
             while True:
-                print("\nAdd/remove, move to 'Watched', back.")
-                manage = input().lower()
+                print("\n'Add', 'remove', 'move' to Watched List, 'back'.")
+                manage = input().strip().lower()
                 if manage == 'add':
                     manager.set_strategy(m.ToWatchList())
+                    print('\n')
                     manager.add_to_list(username)
                 elif manage == 'remove':
+                    print('\n')
                     manager.set_strategy(m.ToWatchList())
                     manager.remove_from_list(username)
                 elif manage == 'move':
+                    print('\n')
                     manager.set_strategy(m.ToWatchList())
                     manager.move_to_watched(username)
                 elif manage =='back':
+                    print('\n')
                     break 
                 else:
+                    print('\n')
                     print("Such a function doesn't exist")
                     continue
         elif choice == '3':
@@ -79,15 +84,18 @@ def functions():
             manager.display_list(username)
         elif choice == '4':
             while True:
-                print("\nAdd/remove from list, back.")
+                print("\n'Add', 'remove' from list, 'back'.")
                 manage = input().lower()
                 if manage == 'add':
+                    print('\n')
                     manager.set_strategy(m.WatchedList())
                     manager.add_to_list(username)
                 elif manage == 'remove':
+                    print('\n')
                     manager.set_strategy(m.WatchedList())
                     manager.remove_from_list(username)
                 elif manage =='back':
+                    print('\n')
                     break 
                 else:
                     print("Such a function doesn't exist.")
@@ -100,18 +108,22 @@ def functions():
                 print("3. Explore by genre.")
                 print("4. Discover based on you watched movies.")
                 print("5. Go back")
-                choice = input("Choose an option: ")
+                choice = input("Choose an option: \n")
                 if choice == '1':
+                    print('\n')
                     movie_rec.random_movies()
                 elif choice == '2':
+                    print('\n')
                     movie_rec.similar_movie()
                 elif choice == '3':
+                    print('\n')
                     movie_rec.movie_genre()
                 elif choice == '4':
                     movie_rec.from_watched(username)
                 elif choice == '5':
                     break
                 else:
+                    print('\n')
                     print("Such a choice doesn't exist")
                     continue                    
 

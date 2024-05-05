@@ -69,12 +69,14 @@ class TestValidation(unittest.TestCase):
         invalid_date3 = ""
         invalid_date4 = "2011 13 13"
         invalid_date5 = "2011 12 32"
+        invalid_date6 ="2025 01 01"
 
         self.assertFalse(self.validator._is_valid_date_of_birth(invalid_date1))
         self.assertFalse(self.validator._is_valid_date_of_birth(invalid_date2))
         self.assertFalse(self.validator._is_valid_date_of_birth(invalid_date3))
         self.assertFalse(self.validator._is_valid_date_of_birth(invalid_date4))
         self.assertFalse(self.validator._is_valid_date_of_birth(invalid_date5))
+        self.assertFalse(self.validator._is_valid_date_of_birth(invalid_date6))
 
 if __name__ == "__main__":
     unittest.main()

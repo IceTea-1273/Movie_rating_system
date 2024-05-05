@@ -30,7 +30,7 @@ class Validation:
                     print("Username can't be empty.")
                     continue
                 if not self._is_valid_username(username):
-                    print("Invalid username. Username can only contain letters, numbers, -, _, ., and ().")
+                    print("Invalid username. Too short too long, or contaisn invalid characters. Username can only contain letters, numbers, -, _, ., and ().")
                     continue
                 return username
             
@@ -49,7 +49,10 @@ class Validation:
     def _is_valid_date_of_birth(self, date_of_birth):
         try:
             year, month, day = map(int, date_of_birth.split())
-            datetime.datetime(year, month, day)
+            input_date = datetime.datetime(year, month, day)
+            current_date = datetime.datetime.now()
+            if input_date >current_date:
+                return False
             return True
         except ValueError:
             return False
